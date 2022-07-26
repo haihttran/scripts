@@ -17,8 +17,8 @@ def load_csv_to_df(file):
 def calculate_rect(x_min, y_min, x_max, y_max):
     #Calculate rectangle's center, width, and height
     x_center, y_center, width, height = 0.0, 0.0, 0.0, 0.0
-    x_center = (x_min + x_max) / 2 
-    y_center = (y_min + y_max) / 2
+    x_center = ((x_min + x_max) / 2 ) / 1920
+    y_center = ((y_min + y_max) / 2 ) / 1080
     width = x_max - x_min
     height = y_max - y_min
     return (x_center, y_center, width, height)    
