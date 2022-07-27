@@ -11,7 +11,6 @@ class_list = ['sheep','sheep_head','person','person_head','dog','dog_head']
 
 def load_csv_to_df(file):
     #Load csv file to dataframe
-
     df = pd.read_csv(file)
     return df
 
