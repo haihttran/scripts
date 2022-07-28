@@ -4,10 +4,12 @@ import os
 from pathlib import Path
 import argparse
 from PIL import Image
+import shutil
+
 
 data_folder = Path.home()
 
-class_list = ['sheep','sheep_head','person','person_head','dog','dog_head']
+class_list = ['sheep','sheep_head','human','human_head','dog','dog_head']
 
 def load_csv_to_df(file):
     #Load csv file to dataframe
@@ -30,6 +32,16 @@ def format_and_write_to_txt(file, class_id, x_center, y_center, width, height):
         str = "{0} {1} {2} {3} {4}\n".format(class_id, x_center, y_center, width, height)
         f.write(str)
         f.close()
+
+def retrieve_all_csv_files(root):
+    #retrieving all csv files in all subdirs
+    file_list = []
+    for path, subdirs, files in os.walk(root):
+        for name in files:
+            if (name.endswith('.csv')):
+                file_list.append(os.path.join(path, name))
+    return file_list
+            
         
 if __name__ == "__main__":
     #Get list of photo file names
@@ -42,18 +54,19 @@ if __name__ == "__main__":
         dir = args['dir']
     else:   
         print("Not a valid path")
-    files = os.listdir(dir)
+    #Set output dir
+    path = "../Output"
+    # Remove existing dir and then Create a new directory because it does not exist 
+    shutil.rmtree(path)	
+    os.makedirs(path)
+    files = retrieve_all_csv_files(dir)
     for file in files:
-        path = "../Output"
-        if not os.path.exists(path):
-            # Create a new directory because it does not exist 
-            os.makedirs(path)
-        if os.path.isfile(os.path.join(dir, file)):
-            df = load_csv_to_df(os.path.join(dir, file))
+        if (os.path.isfile(file)):
+            df = load_csv_to_df(file)
             for index, row in df.iterrows():
                 # im = Image.open(os.path.join("../Data/", file))
                 # width, height = im.size
-                class_id = class_list.index(row['label'])
+                class_id = class_list.index(str(row['label']).lower())
                 #calculate tuple of rect's center x, y, width, and height
                 rect_tuple = calculate_rect(pd.to_numeric(row['xmin']),pd.to_numeric(row['ymin']),
                                pd.to_numeric(row['xmax']),pd.to_numeric(row['ymax']), 1920, 1080)
