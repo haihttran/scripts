@@ -9,7 +9,7 @@ import shutil
 
 data_folder = Path.home()
 
-class_list = ['sheep','sheep_head','human','human_head','dog','dog_head']
+class_list = ['sheep_head','sheep','dog_head','dog','human_head','human']
 
 def load_csv_to_df(file):
     #Load csv file to dataframe
@@ -27,7 +27,7 @@ def calculate_rect(x_min, y_min, x_max, y_max, w_dim, l_dim):
 
 def format_and_write_to_txt(file, class_id, x_center, y_center, width, height):
     #Format string and write to file
-    file = file + '.txt'
+    file = os.path.splitext(file)[0]+ '.txt'
     with open(file, 'a+') as f:
         str = "{0} {1} {2} {3} {4}\n".format(class_id, x_center, y_center, width, height)
         f.write(str)
@@ -57,8 +57,10 @@ if __name__ == "__main__":
     #Set output dir
     path = "../Output"
     # Remove existing dir and then Create a new directory because it does not exist 
-    shutil.rmtree(path)	
-    os.makedirs(path)
+    if os.path.exists(path):
+        shutil.rmtree(path)	
+    else:
+        os.makedirs(path)
     files = retrieve_all_csv_files(dir)
     for file in files:
         if (os.path.isfile(file)):
@@ -67,6 +69,7 @@ if __name__ == "__main__":
                 # im = Image.open(os.path.join("../Data/", file))
                 # width, height = im.size
                 class_id = class_list.index(str(row['label']).lower())
+                print("{0} - {1}\n".format(str(row['label']).lower(), class_id))
                 #calculate tuple of rect's center x, y, width, and height
                 rect_tuple = calculate_rect(pd.to_numeric(row['xmin']),pd.to_numeric(row['ymin']),
                                pd.to_numeric(row['xmax']),pd.to_numeric(row['ymax']), 1920, 1080)
