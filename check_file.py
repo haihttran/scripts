@@ -1,4 +1,5 @@
 import os
+import shutil
 
 def retrieve_all_files(root):
     #retrieving all csv files in all subdirs
@@ -15,13 +16,15 @@ def retrieve_all_files(root):
 
 if __name__ == "__main__":
 
-    text_files = set(retrieve_all_files("../data/labels_raw"))
-    video_files = set(retrieve_all_files("../data/images_raw"))
+    # text_files = set(retrieve_all_files("../data/labels_raw"))
+    text_files = set(retrieve_all_files("../labels_without_dog"))
+    video_files = set(retrieve_all_files("../data/images_raw_2"))
     # print(len(text_files))
     # print(len(video_files))
     diff = video_files - text_files
     # print(len(diff))
     for item in diff:
         item = item + '.jpg'
-        os.remove(os.path.join("../data/images_raw",item))
-        print("deleted - " + item)
+        # os.remove(os.path.join("../data/images_raw",item))
+        shutil.move(os.path.join("../data/images_raw_2",item),"../temp_2")
+        print("moved - " + item)

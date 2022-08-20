@@ -9,7 +9,8 @@ import shutil
 
 data_folder = Path.home()
 
-class_list = ['sheep_head','sheep','dog_head','dog','human_head','human']
+# class_list = ['sheep_head','sheep','dog_head','dog','human_head','human']
+class_list = ['sheep_head','sheep','human_head','human']
 
 def load_csv_to_df(file):
     #Load csv file to dataframe
@@ -68,7 +69,12 @@ if __name__ == "__main__":
             for index, row in df.iterrows():
                 # im = Image.open(os.path.join("../Data/", file))
                 # width, height = im.size
-                class_id = class_list.index(str(row['label']).lower())
+                txt = str(row['label']).lower()
+                if (txt == 'man'):
+                    txt = 'human'
+                if (txt not in class_list):
+                    continue
+                class_id = class_list.index(txt)
                 print("{0} - {1}\n".format(str(row['label']).lower(), class_id))
                 #calculate tuple of rect's center x, y, width, and height
                 rect_tuple = calculate_rect(pd.to_numeric(row['xmin']),pd.to_numeric(row['ymin']),
