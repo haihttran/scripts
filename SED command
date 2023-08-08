@@ -1,0 +1,2 @@
+sed -i  's/^{pattern}/{replacement}/g' *.txt //Substitute first occurent of pattern by replacement by each line
+

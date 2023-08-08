@@ -1,0 +1,4 @@
+rename -v 's/ //g' *
+
+ sed -i  's/^1/3/g' *.txt
+
