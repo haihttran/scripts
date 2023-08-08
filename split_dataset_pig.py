@@ -1,19 +1,20 @@
+
 import os
 import ipdb
 from sklearn.model_selection import train_test_split
 from collections import defaultdict
 import shutil
-from os.path import exists
+
 def is_path(path):
 	if not os.path.exists(path):
 		os.makedirs(path)
 
 def main():
+	images_raw_path = '/media/ubuntu/ubuntu_storage/kewpie/images_raw'
+	labels_raw_path = '/media/ubuntu/ubuntu_storage/kewpie/labels_raw'
+	images_path = '/media/ubuntu/ubuntu_storage/08jan2023/dataset/images'
+	labels_path = '/media/ubuntu/ubuntu_storage/08jan2023/dataset/labels'
 
-	images_raw_path = '/media/ubuntu/ubuntu_storage/Fletcher-tfi/images_raw'
-	labels_raw_path = '/media/ubuntu/ubuntu_storage/Fletcher-tfi/labels_raw'
-	images_path = '/media/ubuntu/ubuntu_storage/Fletcher-tfi/Fletcher-dataset-11042023/images'
-	labels_path = '/media/ubuntu/ubuntu_storage/Fletcher-tfi/Fletcher-dataset-11042023/labels'
 
 	is_path(images_path)
 	is_path(labels_path)
@@ -40,22 +41,17 @@ def main():
 		# print('\n')
 			value_train, value_validation = train_test_split(value, test_size=0.25, train_size = 0.75, random_state=0)
 		else:
-			value_train = value			
+			value_train = value
 		# ipdb.set_trace()
 		for image in value_train:
 			txt = image.split('.jpg')[0] + '.txt'
-			if exists(os.path.join(images_raw_path,image)) and exists(os.path.join(labels_raw_path, txt)):
-				shutil.copy(os.path.join(images_raw_path, image), os.path.join(images_path, 'train', image))
-				shutil.copy(os.path.join(labels_raw_path, txt), os.path.join(labels_path, 'train', txt))
-			else:
-				continue	
+			shutil.copy(os.path.join(images_raw_path, image), os.path.join(images_path, 'train', image))
+			shutil.copy(os.path.join(labels_raw_path, txt), os.path.join(labels_path, 'train', txt))
+
 		for image in value_validation:
 			txt = image.split('.jpg')[0] + '.txt'
-			if exists(os.path.join(images_raw_path,image)) and exists(os.path.join(labels_raw_path, txt)):
-				shutil.copy(os.path.join(images_raw_path, image), os.path.join(images_path, 'validation', image))
-				shutil.copy(os.path.join(labels_raw_path, txt), os.path.join(labels_path, 'validation', txt))
-			else:
-				continue
+			shutil.copy(os.path.join(images_raw_path, image), os.path.join(images_path, 'validation', image))
+			shutil.copy(os.path.join(labels_raw_path, txt), os.path.join(labels_path, 'validation', txt))
 
 	ipdb.set_trace()
 	os._exit(0)

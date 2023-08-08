@@ -1,0 +1,8 @@
+train: /home/ubuntu/data/images/train/ 
+val:  /home/ubuntu/data/images/validation/
+
+# number of classes
+nc: 2
+
+# class names
+names: ["cow","person"]
